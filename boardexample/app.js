@@ -13,6 +13,24 @@ db.on("error", function(err) {
   console.log("DB ERROR :", err);
 });
 
+//model setting
+var postSchema = mongoose.Schema({
+  title : {
+    type: String,
+    required: true
+  },
+  body : {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Data,
+    default: Date.now
+  },
+  updatedAt: Date
+});
+var Post = mongoose.model('post', postSchema);
+
 //view setting
 app.set("view engine",'ejs');
 
