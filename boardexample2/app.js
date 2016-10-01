@@ -39,6 +39,7 @@ var postSchema = mongoose.Schema({
 var Post = mongoose.model('post', postSchema);
 
 //set routes
+//index
 app.get('/posts', function(req, res) {
   Post.find({}, function(err, posts) {
     if (err) return res.json({success:false, message:err});
@@ -46,10 +47,36 @@ app.get('/posts', function(req, res) {
   });
 });
 
+//post
 app.post('/posts', function(req, res) {
   Post.create(req.body.post, function(err, post) {
     if (err) return res.json({success:false, message:err});
     res.json({success:true, data:post});
+  });
+});
+
+//show
+app.get('/posts/:id', function(req, res) {
+  Post.findById(req.params.id, function (err, post) {
+    if (err) return res.json({success:false, message:err});
+    res.json({success:true, data:post});
+  });
+});
+
+//update
+app.put('/posts/:id', function(req, res) {
+  req.body.post.updatedAt=Date.now();
+  Post.findByIdAndUpdate(req.params.id, req.body.post, function(err, post) {
+    if(err) return res.json({success:false, message:err});
+    res.json({success:true, message:post._id+"updated"});
+  });
+});
+
+//delete
+app.delete('/posts/:id', function(req, res) {
+  Post.findByIdAndRemove(req.params.id, function(err, post) {
+    if (err) return res.json({success:false, message:err});
+    res.json({success:true, message:post._id+"deleted"});
   });
 });
 
